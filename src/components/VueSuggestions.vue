@@ -4,7 +4,6 @@
         :model.sync="city"
         :coordinates.sync="coordinates"
         :placeholder="'Начните вводить'"
-        class="form-control"
         :options="suggestionOptions">
     </VueSuggestions>
   </div>
@@ -14,14 +13,17 @@
   import VueSuggestions from 'vue-suggestions';
  
   export default {
+    props: ['dialog'],
     data() {
       return {
+        
         city: '',
         coordinates: {
           latitude: '',
           longitude: ''
         },
         suggestionOptions: {
+          chosenName: [],
           token: 'b4390c81d1a08f730d018daf7d62ca6b08376ec2',
           type: "NAME",
           scrollOnFocus: false,
@@ -29,7 +31,7 @@
           triggerSelectOnEnter: false,
           addon: 'none',
           onSelect (suggestion) {
-            
+            this.chosenName.push(suggestion.value);
           }
         },
       }
@@ -42,5 +44,12 @@
 <style>
   .suggestion {
     width: 100px;
+  }
+  .suggestions-wrapper {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+    -webkit-text-size-adjust: 100%;
   }
 </style>
