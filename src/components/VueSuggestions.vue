@@ -16,7 +16,6 @@
     props: ['dialog'],
     data() {
       return {
-        
         city: '',
         coordinates: {
           latitude: '',

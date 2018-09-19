@@ -17,6 +17,7 @@
     "vue-localstorage": "^0.6.2",
     "vue-ls": "^3.2.0",
     "vue-paginate": "^3.6.0",
+    "vue-paginatron": "^0.2.2",
     "vue-suggestions": "^1.4.0"
   },
   "devDependencies": {

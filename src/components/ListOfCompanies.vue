@@ -1,39 +1,45 @@
 <template>
     <div class="container">
         <div class="table-companies">
-            <paginate :per=5 name="companies" :list="companies" class="paginate-list">
-                <table class="table table-bordered">
-                    <thead class="thead-dark">
-                        <th class="text-center" v-on:click="sortName" scope="col">Company Name</th>
-                        <th v-on:click="sortCeo" scope="col">CEO</th>
-                        <th v-on:click="sortINN" scope="col">INN</th> 
-                        <th>Edit</th> 
-                        <th>Action</th>      
-                    </thead>
-                    <tr v-for="(company, index) in paginated('companies')" :key="index">
-                        <td v-for="(property, index) in company" :key="index">
-                            <p v-if="!company.editable"> {{ property }} </p>
-                            <input class="form-control" v-bind:id="company.name + '-' + index" v-if="company.editable" v-bind:value="property"/>
-                        </td>
-                        <td>
-                            <div class="btn-group">
+            <paginatron @change="updateItems" @next="advanced" @previous="decreased" :items-per-page="5" :items="companies">
+                <div slot-scope="{ setPage, nextPage, prevPage, page, pages, hasNextPage, hasPrevPage, nextButtonEvents, prevButtonEvents, nextButtonAttrs, prevButtonAttrs }">
+                    <table class="table table-bordered">
+                        <thead class="thead-dark">
+                            <th class="text-center" v-on:click="sortName" scope="col">Company Name</th>
+                            <th v-on:click="sortCeo" scope="col">CEO</th>
+                            <th v-on:click="sortINN" scope="col">INN</th> 
+                            <th>Edit</th> 
+                            <th>Action</th>      
+                        </thead>
+                        <tr v-for="(item, index) in activeItems" :key="item.INN">
+                            <td v-for="(property, index) in item" :key="index">
+                                <p v-if="!item.editable"> {{ property }} </p>
+                                <input class="form-control" v-bind:id="item.name + '-' + index" v-if="item.editable" v-bind:value="property"/>
+                            </td>
+                            <td>
                                 <button class="btn btn-outline-light" v-on:click="removeCompany(index)">
                                     <DeleteIcon /> 
                                 </button>
-                                <button class="btn btn-outline-light" v-if="!company.editable" @click="editCompany(index)">
+                                <button class="btn btn-outline-light" v-if="!item.editable" @click="editCompany(index)">
                                     <EditIcon />
                                 </button>
-                                <button class="btn btn-outline-light" v-if="company.editable" @click="editCompany(index)()">
+                                <button class="btn btn-outline-light" v-if="item.editable" @click="editCompany(index)()">
                                     <EditIcon />
-                                </button>        
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            </paginate>
-            <paginate-links for="companies" :show-step-links="true"></paginate-links>
+                                </button>   
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="paginatron">
+                        <button class="btn btn-dark" v-on="prevButtonEvents" v-bind="prevButtonAttrs">Prev</button>
+                        <ul class="pagination" v-for="(page, index) in pages" :key="index">
+                            <li class="page-link" @click="setPage(index)">{{ page }}</li>
+                        </ul>
+                        <button class="btn btn-dark" v-on="nextButtonEvents">Next</button>
+                    </div>    
+                </div>
+            </paginatron>    
         </div>
-        <div class="dialog">
+        <div>
             <Dialog 
                 @showDialog="toggle"   
                 @addCompany="addCompany"   
@@ -41,7 +47,6 @@
                 v-bind:visibleDialog="visibleDialog"
             />
         </div>
-
     </div>
 </template>
 
@@ -51,11 +56,12 @@
     import Dialog from './Dialog';
     import EditIcon from './style/EditIcon';
     import DeleteIcon from './style/DeleteIcon';
+    import Paginatron from 'vue-paginatron';
     import 'bootstrap/dist/css/bootstrap.css';
     import 'bootstrap-vue/dist/bootstrap-vue.css';
-    
-    Vue.use(Storage); 
 
+    Vue.use(Storage); 
+    
     export default {    
         props: [],
         methods: {
@@ -102,12 +108,22 @@
             },
             toggle() {
                 this.visibleDialog = !this.visibleDialog;
+            },
+            updateItems(activeItems) {
+                this.activeItems = activeItems;
+            },
+            decreased({ prev, current }) {
+                console.log(prev, current);
+            },
+            advanced({ activeItems, prev, current }) {
+                console.log(prev, current);
             }
         },
         components: {
             Dialog,
             DeleteIcon,
-            EditIcon
+            EditIcon,
+            Paginatron
         },
         watch: {
             companies: function(val) {
@@ -125,6 +141,12 @@
                         CEO: 'Пупин',
                         INN: 1337,
                         editable: false
+                    },
+                    {   
+                        name: 'Pepsi',
+                        CEO: 'Kупин',
+                        INN: 223,
+                        editable: false
                     }
                 ],
                 dialog: {
@@ -134,10 +156,9 @@
                   editable: false 
                 },
                 editable: false,
-                paginate: ['companies'],
+                CEOsorted: false,
                 INNsorted: false,
                 nameSorted: false,
-                CEOsorted: false,
                 visibleDialog: false
             }
         }
@@ -154,43 +175,31 @@
         height: 65px;
     }
 
-    ul.paginate-links {
-        list-style: none;
-        text-align: center;
+    .paginatron {
+        display: flex;
+        justify-content: center;
     }
 
-    ul.paginate-links > li {
-        display: inline-block;
-        padding: 5px 9px;
-        margin-right: 4px;
-        border-radius: 3px;
-        border: solid 1px #32373b;
-        background: #3e4347;
-        box-shadow: inset 0px 1px 1px rgba(255,255,255, .1), 0px 1px 3px rgba(0,0,0, .1);
-        font-size: .875em;
-        font-weight: bold;  
-        text-decoration: none;
-        color: #feffff;
-        text-shadow: 0px 1px 0px rgba(0,0,0, .5);
-        cursor: pointer;
-    }
-
-    ul.paginate-links > li:hover {
-        background: #3d4f5d;
-        background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#547085), to(#3d4f5d));
-        background: -moz-linear-gradient(0% 0% 270deg,#547085, #3d4f5d);
-    }
-    
     table {
         text-align: center;
         font-family: 'Cabin', sans-serif;
     }
     
-    svg {
+    th, svg {
         cursor: pointer;
     }
-</style>
 
+    .page-link {
+        margin: 0;
+        color: #000;
+    }
+
+    .pagination {
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+
+</style>
 
 
 
