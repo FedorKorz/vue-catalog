@@ -25,7 +25,6 @@
 </template>
 
 <script>
-    import VueSuggestions from './VueSuggestions';
 
     export default {
         props: ['dialog','visibleDialog'],
@@ -36,9 +35,6 @@
             addCompany() {
                 this.$emit('addCompany');
             }
-        },
-        components: {
-            VueSuggestions
         }
     }
 </script>

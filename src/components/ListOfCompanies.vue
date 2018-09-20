@@ -86,14 +86,26 @@
                 self.companies[index].editable = !self.companies[index].editable;
             },
             sortCeo() {
-                this.companies.sort(function(a, b) {
-                    return a.CEO > b.CEO ? 1 : -1;
-                });    
+                switch(this.CEOsorted) {
+                    case false:
+                        this.companies.sort((a, b) => a.CEO > b.CEO ? 1 : -1);
+                        break;
+                    case true:
+                        this.companies.sort((a, b) => a.CEO < b.CEO ? 1 : -1);
+                        break;
+                }
+                this.CEOsorted = !this.CEOsorted;
             },
             sortName() {
-                this.companies.sort(function(a, b) {
-                    return a.name > b.name ? 1 : -1;
-                });
+                switch(this.nameSorted) {
+                    case false:
+                        this.companies.sort((a, b) => a.name > b.name ? 1 : -1);
+                        break;
+                    case true:
+                        this.companies.sort((a, b) => a.name < b.name ? 1 : -1);
+                        break;
+                }
+                this.nameSorted = !this.nameSorted;
             },
             sortINN() {
                 switch(this.INNsorted) {
