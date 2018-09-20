@@ -9,9 +9,9 @@
             class="form-wrapper"
             v-show="visibleDialog">
             <form>
-                <input class="input-form" v-model="dialog.name" id="company-name" type="text" placeholder="Enter company name..."><br>
                 <input class="input-form" v-model="dialog.CEO" id="ceo-name" type="text" name="CEO" placeholder="Enter CEO name..."><br>
-                <input class="input-form" v-model="dialog.INN" id="inn" type="text" name="INN" placeholder="Enter INN..."><br>    
+                <input class="input-form" v-model="dialog.INN" id="inn" type="text" name="INN" placeholder="Enter INN..."><br>  
+                <input class="input-form" v-model="dialog.name" id="company-name" type="text" placeholder="Enter company name..."><br>
             </form>          
             <div>
                 <button

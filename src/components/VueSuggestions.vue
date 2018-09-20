@@ -30,14 +30,14 @@
           triggerSelectOnEnter: false,
           addon: 'none',
           onSelect (suggestion) {
-            this.chosenName.push(suggestion.value);
+            alert(suggestion.value);
+            console.log(this);
           }
         },
       }
     },
     components: { VueSuggestions }
   }
-  // b4390c81d1a08f730d018daf7d62ca6b08376ec2
 </script> 
 
 <style>

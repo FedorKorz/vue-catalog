@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="table-companies">
-            <paginatron @change="updateItems" @next="advanced" @previous="decreased" :items-per-page="5" :items="companies">
+            <paginatron @change="updateItems" @next="advanced" @previous="decreased" :items-per-page="4" :items="companies">
                 <div slot-scope="{ setPage, nextPage, prevPage, page, pages, hasNextPage, hasPrevPage, nextButtonEvents, prevButtonEvents, nextButtonAttrs, prevButtonAttrs }">
                     <table class="table table-bordered">
                         <thead class="thead-dark">
@@ -39,7 +39,7 @@
                 </div>
             </paginatron>    
         </div>
-        <div>
+        <div class="paginatron-btns">
             <Dialog 
                 @showDialog="toggle"   
                 @addCompany="addCompany"   
@@ -127,7 +127,7 @@
         },
         watch: {
             companies: function(val) {
-                Vue.ls.set('companies', val)
+                Vue.ls.set('companies', val, 60 * 60 * 1000);
             }   
         },
         created: function() {
@@ -139,13 +139,31 @@
                     {   
                         name: 'Cola',
                         CEO: 'Пупин',
-                        INN: 1337,
+                        INN: 1,
                         editable: false
                     },
                     {   
                         name: 'Pepsi',
                         CEO: 'Kупин',
-                        INN: 223,
+                        INN: 2,
+                        editable: false
+                    },
+                    {   
+                        name: 'Bon Aqua',
+                        CEO: 'Мупин',
+                        INN: 3,
+                        editable: false
+                    },
+                    {   
+                        name: 'Байкал',
+                        CEO: 'Зупин',
+                        INN: 4,
+                        editable: false
+                    },
+                    {   
+                        name: 'Fanta',
+                        CEO: 'Тупин',
+                        INN: 5,
                         editable: false
                     }
                 ],
