@@ -1,21 +1,15 @@
-# vue-hello-world
-
-> none
-
 ## Build Setup
 
 ``` bash
 # install dependencies
 npm install
 
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
+# start app
 ```
+npm start
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+
+Изначально localStorage отключен, т.к. возникли проблемы при взаимодействии его и пагинации. 
+Чтобы подключить localStorage достаточно убрать // в 146 строке файла ListOfCompanies, предварительно добавив что-то в список. 
+
+Для увелечения количества компаний на странице нужно изменить директиву :items-per-page="4" в файле ListOfCompanies, предварительно добавив их в массив companies. 
