@@ -143,7 +143,7 @@
             }   
         },
         created: function() {
-            this.companies = Vue.ls.get('companies');
+            // this.companies = Vue.ls.get('companies');
         }, 
         data() {
             return {
